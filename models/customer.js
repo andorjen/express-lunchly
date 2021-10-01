@@ -57,6 +57,7 @@ class Customer {
   }
 
   /** get customers list based on searchTerm */
+
   static async search(searchTerm) {
     console.log("searchterm", searchTerm)
     const results = await db.query(
@@ -70,9 +71,28 @@ class Customer {
        ORDER BY last_name, first_name`,
       ['%' + searchTerm + '%']
     );
-    console.log("results", results)
+    // console.log("results", results)
     return results.rows.map(c => new Customer(c));
   }
+
+  /** get top ten customers by number of reservations */
+
+  static async best() {
+    const results = await db.query(
+      `SELECT c.id,
+              c.first_name AS "firstName",
+              c.last_name  AS "lastName",
+              c.phone,
+              c.notes
+      FROM customers c
+      JOIN reservations r ON c.id = r.customer_id
+      GROUP BY c.id
+      ORDER BY COUNT(r.id) DESC
+      LIMIT 10`
+    );
+    return results.rows.map(c => new Customer(c));
+  }
+
 
   /** get all reservations for this customer. */
 
