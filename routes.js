@@ -12,7 +12,13 @@ const router = new express.Router();
 /** Homepage: show list of customers. */
 
 router.get("/", async function (req, res, next) {
-  const customers = await Customer.all();
+  const { searchTerm } = req.query;
+  let customers;
+  if (searchTerm) {
+    customers = await Customer.search(searchTerm);
+  } else {
+    customers = await Customer.all();
+  }
   console.log("in solution routes file");
   console.log(customers);
   return res.render("customer_list.html", { customers });
