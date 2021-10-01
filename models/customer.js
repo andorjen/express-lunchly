@@ -90,6 +90,11 @@ class Customer {
       );
     }
   }
-}
 
+  /** Concatenate first and last name into full name */
+
+  fullName() {
+    return `${this.firstName} ${this.lastName}`
+    };
+  }
 module.exports = Customer;
