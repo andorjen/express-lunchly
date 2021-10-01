@@ -19,8 +19,8 @@ router.get("/", async function (req, res, next) {
   } else {
     customers = await Customer.all();
   }
-  console.log("in solution routes file");
-  console.log(customers);
+  // console.log("in solution routes file");
+  // console.log(customers);
   return res.render("customer_list.html", { customers });
 });
 
@@ -95,6 +95,7 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
     numGuests,
     notes,
   });
+  // reservation.numGuests
   await reservation.save();
 
   return res.redirect(`/${customerId}/`);

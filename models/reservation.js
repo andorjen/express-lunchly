@@ -5,6 +5,7 @@
 const moment = require("moment");
 
 const db = require("../db");
+const { BadRequestError } = require("../expressError");
 
 /** A reservation for a party */
 
@@ -54,6 +55,14 @@ class Reservation {
       );
       this.id = result.rows[0].id;
   }
+
+  // get numGuests() {
+  //   if (this.numGuests < 2){
+  //     throw new BadRequestError("Reservation must be for at least 2 people");
+  //   }
+  // }
+
+
 }
 
 

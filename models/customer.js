@@ -130,9 +130,9 @@ class Customer {
   }
 
   /** Concatenate first and last name into full name */
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
 
-  fullName() {
-    return `${this.firstName} ${this.lastName}`
-  };
 }
 module.exports = Customer;
