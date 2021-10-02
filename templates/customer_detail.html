@@ -22,7 +22,7 @@
     <ul>
       {% for reservation in reservations %}
       <li>
-        <b>{{ reservation.getFormattedStartAt() }}</b>
+        <b>{{ reservation.startAt}}</b>
         for {{ reservation.numGuests }}
       </li>
       {% endfor %}
