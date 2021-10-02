@@ -84,13 +84,21 @@ class Customer {
               c.last_name  AS "lastName",
               c.phone,
               c.notes
-      FROM customers c
-      JOIN reservations r ON c.id = r.customer_id
+      FROM customers AS c
+      JOIN reservations AS r 
+      ON c.id = r.customer_id
       GROUP BY c.id
       ORDER BY COUNT(r.id) DESC
       LIMIT 10`
     );
-    return results.rows.map(c => new Customer(c));
+
+    const customers = results.rows.map(c => new Customer(c));
+    for (let customer of customers) {
+      const reservations = await Reservation.getReservationsForCustomer(customer.id);
+      customer.reservations = reservations;
+    }
+    return customers;
+
   }
 
 

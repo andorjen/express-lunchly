@@ -9,7 +9,7 @@
   {% for customer in customers %}
   <li>
     <a href="/{{ customer.id }}/">
-      {{ customer.fullName }}
+      {{ customer.fullName }} <i>{{customer.reservations.length}}</i>
     </a>
   </li>
   {% endfor %}

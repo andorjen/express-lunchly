@@ -13,30 +13,28 @@ class Reservation {
   constructor({ id, customerId, numGuests, startAt, notes }) {
     this.id = id;
     this.customerId = customerId;
-    // this.numGuests = numGuests;
+    this.numGuests = numGuests;
     this.startAt = startAt;
     this.notes = notes;
-    this.guestCount = numGuests;
   }
 
-  /** formatter for startAt */
+  /** methods for setting and getting the startAt date, 
+   * when setting, set as original format, when getting, get formatted version */
 
   get startAt() {
-    // return this._startAt;
-    return moment(new Date(this._startAt)).format("MMMM Do YYYY, h:mm a");
+    // console.log(this._startAt, "this.startAt");
+    // console.log(moment(this._startAt).format("MMMM Do YYYY, h:mm a"), "date")
+    return moment(this._startAt).format("MMMM Do YYYY, h:mm a");
   }
 
   set startAt(val) {
-
     const date = new Date(val);
-    console.log(date, "date")
-
+    // console.log(val, "val")
     if (!date.getDate()) {
       throw new BadRequestError("You must pass in a valid date");
     }
-    // const formatted = moment(val).format("MMMM Do YYYY, h:mm a");
-    // console.log(formatted, "formatted")
-    this._startAt = val;
+
+    this._startAt = date.toISOString();
   }
 
   /** given a customer id, find their reservations. */
@@ -60,7 +58,6 @@ class Reservation {
   /** save this reservation */
 
   async save() {
-    console.log("this.startAt", this.startAt)
     const result = await db.query(
       `INSERT INTO reservations (customer_id, 
                         start_at, 
@@ -68,20 +65,22 @@ class Reservation {
                         notes)
              VALUES ($1, $2, $3, $4)
              RETURNING id`,
-      [this.customerId, this.startAt, this.numGuests, this.notes],
+      [this.customerId, this._startAt, this.numGuests, this.notes],
     );
     this.id = result.rows[0].id;
   }
 
-  get guestCount() {
-    return this.numGuests;
+  /** methods for getting and setting the numGuests on a reservation, if lower than 2, throw error */
+
+  get numGuests() {
+    return this._numGuests;
   }
 
-  set guestCount(numGuests) {
-    if (numGuests < 2) {
+  set numGuests(val) {
+    if (val < 2) {
       throw new BadRequestError("Reservation must be for at least 2 people");
     }
-    this.numGuests = numGuests;
+    this._numGuests = val;
   }
 
 
